@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>fhuucka – Twój Marketplace Premium</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --purple-deep: #1a0533;
+      --purple-mid: #3b0f6e;
+      --purple-bright: #7c3aed;
+      --purple-glow: #a855f7;
+      --purple-light: #c084fc;
+      --accent: #f0abfc;
+      --gold: #fbbf24;
+      --white: #faf5ff;
+      --glass: rgba(124,58,237,0.12);
+      --glass-border: rgba(168,85,247,0.25);
+      --text-muted: rgba(240,171,252,0.6);
+    }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--purple-deep);
+      color: var(--white);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ---- Tło z gradientami ---- */
+    body::before {
+      content:'';
+      position:fixed; inset:0; z-index:0;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 10%, rgba(124,58,237,0.35) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 80% at 80% 80%, rgba(168,85,247,0.25) 0%, transparent 55%),
+        radial-gradient(ellipse 50% 40% at 50% 50%, rgba(59,15,110,0.6) 0%, transparent 70%);
+      pointer-events:none;
+    }
+
+    /* ---- Fix dla szumu (SVG Noise) ---- */
+    body::after {
+      content:'';
+      position:fixed; inset:0; z-index:1;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+      opacity: 0.4;
+      pointer-events:none;
+    }
+
+    nav {
+      position: fixed; top:0; left:0; right:0; z-index:100;
+      display:flex; align-items:center; justify-content:space-between;
+      padding: 1.2rem 5%;
+      backdrop-filter: blur(20px);
+      background: rgba(26,5,51,0.7);
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .logo {
+      font-family:'Syne',sans-serif;
+      font-weight:800; font-size:1.5rem;
+      background: linear-gradient(135deg, var(--purple-light), var(--accent));
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+      letter-spacing:-0.02em;
+    }
+
+    .nav-links { display:flex; gap:2rem; list-style:none; }
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration:none; font-size:.9rem; font-weight:500;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color:var(--accent); }
+
+    .nav-cta {
+      background: linear-gradient(135deg, var(--purple-bright), var(--purple-glow));
+      color:#fff; border:none; padding:.6rem 1.4rem;
+      border-radius:50px; font-weight:600; font-size:.9rem;
+      cursor:pointer; transition: transform .2s, box-shadow .2s;
+    }
+
+    .hero {
+      position:relative; z-index:2;
+      min-height:100vh;
+      display:flex; flex-direction:column;
+      align-items:center; justify-content:center;
+      text-align:center;
+      padding: 8rem 5% 4rem;
+    }
+
+    .hero-badge {
+      display:inline-flex; align-items:center; gap:.5rem;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius:50px; padding:.4rem 1rem;
+      font-size:.8rem; font-weight:500; color:var(--purple-light);
+      margin-bottom:2rem;
+    }
+
+    .hero h1 {
+      font-family:'Syne',sans-serif;
+      font-size:clamp(3.5rem, 12vw, 9rem);
+      font-weight:800; line-height:1;
+      letter-spacing:-0.04em;
+      margin-bottom: 1.5rem;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, var(--purple-light) 0%, var(--accent) 50%, var(--gold) 100%);
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+    }
+
+    .hero p {
+      max-width:600px; color:var(--text-muted); font-size:1.1rem; line-height:1.7;
+    }
+
+    .vendors-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+      gap:2rem; max-width:1100px; margin:0 auto;
+    }
+
+    .vendor-card {
+      background: rgba(59,15,110,0.3);
+      border:1px solid var(--glass-border);
+      border-radius:24px; padding:2.5rem;
+      position:relative; overflow:hidden;
+      transition: transform .3s;
+      backdrop-filter:blur(10px);
+    }
+
+    .vendor-card:hover { transform:translateY(-10px); }
+
+    .btn-buy {
+      width:100%; padding:.9rem; border-radius:50px;
+      font-weight:600; cursor:pointer; border:none;
+      display:block; text-align:center; text-decoration:none;
+      margin-top:1.5rem;
+    }
+
+    .btn-purple { background: linear-gradient(135deg, var(--purple-bright), var(--purple-glow)); color:#fff; }
+
+    section { position:relative; z-index:2; padding:6rem 5%; }
+
+    .reveal { opacity:0; transform:translateY(30px); transition: all .8s ease-out; }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+
+    @media(max-width:768px) {
+      .nav-links { display:none; }
+      .hero h1 { font-size: 4rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">fhuucka</div>
+  <ul class="nav-links">
+    <li><a href="#vendors">Oferty</a></li>
+    <li><a href="#features">Zalety</a></li>
+    <li><a href="#opinie">Opinie</a></li>
+  </ul>
+  <button class="nav-cta" onclick="document.getElementById('vendors').scrollIntoView({behavior:'smooth'})">Zacznij teraz</button>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">Ekskluzywny Marketplace 2026</div>
+  <h1><span class="gradient-text">fhuucka</span></h1>
+  <p>Twoje źródło sprawdzonych vendorów premium. Najlepsza jakość perfum, elektroniki i odzieży w zasięgu ręki.</p>
+  <div style="margin-top:2.5rem; display:flex; gap:1rem;">
+    <button class="nav-cta" style="padding:1rem 2.5rem; font-size:1rem;" onclick="document.getElementById('vendors').scrollIntoView({behavior:'smooth'})">Przeglądaj produkty</button>
+  </div>
+</div>
+
+<section id="vendors">
+  <div style="text-align:center;margin-bottom:4rem;">
+    <h2 style="font-family:'Syne'; font-size:3rem;">Nasze Kategorie</h2>
+  </div>
+  <div class="vendors-grid">
+    <div class="vendor-card reveal">
+      <div style="font-size:2.5rem; margin-bottom:1rem;">🌸</div>
+      <h3>Cologne Vendor</h3>
+      <p style="color:var(--text-muted); margin:1rem 0;">Dostęp do najlepszych zapachów świata.</p>
+      <div style="font-size:1.5rem; font-weight:800; color:var(--accent);">49,99 zł</div>
+      <a href="https://www.naffy.io/niesamowitamocinwestowania" target="_blank" class="btn-buy btn-purple">Kup teraz</a>
+    </div>
+    <div class="vendor-card reveal">
+      <div style="font-size:2.5rem; margin-bottom:1rem;">⚡</div>
+      <h3>Tech Vendor</h3>
+      <p style="color:var(--text-muted); margin:1rem 0;">Najnowsza elektronika w cenach hurtowych.</p>
+      <div style="font-size:1.5rem; font-weight:800; color:var(--accent);">69,99 zł</div>
+      <button class="btn-buy btn-purple" onclick="alert('Wkrótce dostępne!')">Wkrótce</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div style="padding:4rem 5%; border-top:1px solid var(--glass-border); display:flex; justify-content:space-between; align-items:center;">
+    <div class="logo">fhuucka</div>
+    <p style="color:var(--text-muted); font-size:0.8rem;">© 2026 fhuucka. Wszystkie prawa zastrzeżone.</p>
+  </div>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
